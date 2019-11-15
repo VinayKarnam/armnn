@@ -1,4 +1,5 @@
 option(BUILD_CAFFE_PARSER "Build Caffe parser" OFF)
+option(BUILD_CAFFE2_PARSER "Build Caffe parser" OFF)
 option(BUILD_TF_PARSER "Build Tensorflow parser" OFF)
 option(BUILD_ONNX_PARSER "Build Onnx parser" OFF)
 option(BUILD_UNIT_TESTS "Build unit tests" ON)
@@ -117,7 +118,7 @@ link_directories(${Boost_LIBRARY_DIRS})
 find_package (Threads)
 
 # Favour the protobuf passed on command line
-if(BUILD_TF_PARSER OR BUILD_CAFFE_PARSER OR BUILD_ONNX_PARSER)
+if(BUILD_TF_PARSER OR BUILD_CAFFE_PARSER OR BUILD_ONNX_PARSER OR BUILD_CAFFE2_PARSER)
     find_library(PROTOBUF_LIBRARY_DEBUG NAMES "protobufd"
         PATHS ${PROTOBUF_ROOT}/lib
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -146,6 +147,15 @@ if(BUILD_CAFFE_PARSER)
     find_path(CAFFE_GENERATED_SOURCES "caffe/proto/caffe.pb.h"
         HINTS ${CAFFE_BUILD_ROOT}/include)
     include_directories(SYSTEM "${CAFFE_GENERATED_SOURCES}")
+endif()
+
+# Caffe2 and its dependencies
+if(BUILD_CAFFE2_PARSER)
+    add_definitions(-DARMNN_CAFFE2_PARSER)
+
+    find_path(CAFFE2_GENERATED_SOURCES "caffe2.pb.h"
+        HINTS ${CAFFE2_BUILD_ROOT}/include)
+    include_directories(SYSTEM "${CAFFE2_GENERATED_SOURCES}")
 endif()
 
 if(BUILD_TF_PARSER)
@@ -331,6 +341,10 @@ endif()
 
 if(NOT BUILD_CAFFE_PARSER)
     message(STATUS "Caffe parser support is disabled")
+endif()
+
+if(NOT BUILD_CAFFE2_PARSER)
+    message(STATUS "Caffe2 parser support is disabled")
 endif()
 
 if(NOT BUILD_TF_PARSER)
