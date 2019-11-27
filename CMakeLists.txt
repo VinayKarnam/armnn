@@ -118,6 +118,11 @@ if(BUILD_CAFFE2_PARSER)
     target_link_libraries(armnnCaffe2Parser ${PROTOBUF_LIBRARIES})
 endif()
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 54c62aeaf3dd784e5968035ee91d42c93a48fa5a
 if(BUILD_ONNX_PARSER)
     set(armnn_onnx_parser_sources)
     list(APPEND armnn_onnx_parser_sources
